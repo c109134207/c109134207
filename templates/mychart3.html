@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}
+陳妙雅的統計圖表
+{% endblock %}
+{% block titlemessage %}
+    <h1>陳妙雅的統計圖表</h1>
+{% endblock %}
+{% block content %}
+<div class="dropdown">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        選擇店面    </a>
+  
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="/mychart3/">全部顯示</a>
+      {% for branch in branches %}
+      <a class="dropdown-item" href="/mychart/{{branch.id}}/">{{branch.title}}</a>
+      {% endfor %}
+     
+    </div>
+  </div>
+<canter>
+<table width=800>
+  <tr><td>
+<canvas id="myChart" width="800" height="400"></canvas>
+</td></tr>
+</table>
+</canter>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myBarChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [
+    {% for item in data %}
+        '{{ item.branch }}-{{item.income_month}}',
+    {% endfor %}
+    ],
+        datasets: [{
+            label: '各分店營收情形',
+            data: [
+                {% for item in data %}
+                    '{{ item.income }}',
+                {% endfor %}
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(200, 100, 60, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(200, 100, 60, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+<div class = "container">
+    <div class = "dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+選擇表格樣式
+          </a>
+            <span class="glyphicon glyphicon-user"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class= "dropdown-menu">
+            <li><a href="/mychart/">直線圖</a></li>
+            <li><a href="/mychart2/">橫向圖</a></li>
+            <li><a href="/mychart3/">線狀圖</a></li>
+            <li><a href="/mychart4/">圓餅圖</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
